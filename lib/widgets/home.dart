@@ -29,11 +29,14 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   Expanded(
-                      flex: 1,
+                      flex: 2,
                       child: TextField(
+
                         controller: movieEditingController,
                         decoration:
-                            InputDecoration(hintText: "Enter movie name"),
+                            InputDecoration(
+                                hintText: "Enter movie name",
+                            suffixIcon: IconButton(icon: Icon(Icons.clear), onPressed: ()=> movieEditingController.clear(),)),
                       )),
                   Expanded(
                     child: ElevatedButton(
@@ -58,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           }
                         },
-                        child: Text("Search Movie")),
+                        child: Text("Search")),
                   )
                 ],
               ),
