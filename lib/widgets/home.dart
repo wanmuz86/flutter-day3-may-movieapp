@@ -15,38 +15,38 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _movies = [
-    {
-      "Title": "Harry Potter and the Deathly Hallows: Part 2",
-      "Year": "2011",
-      "imdbID": "tt1201607",
-      "Type": "movie",
-      "Poster":
-          "https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"
-    },
-    {
-      "Title": "Harry Potter and the Sorcerer's Stone",
-      "Year": "2001",
-      "imdbID": "tt0241527",
-      "Type": "movie",
-      "Poster":
-          "https://m.media-amazon.com/images/M/MV5BNmQ0ODBhMjUtNDRhOC00MGQzLTk5MTAtZDliODg5NmU5MjZhXkEyXkFqcGdeQXVyNDUyOTg3Njg@._V1_SX300.jpg"
-    },
-    {
-      "Title": "Harry Potter and the Chamber of Secrets",
-      "Year": "2002",
-      "imdbID": "tt0295297",
-      "Type": "movie",
-      "Poster":
-          "https://m.media-amazon.com/images/M/MV5BMjE0YjUzNDUtMjc5OS00MTU3LTgxMmUtODhkOThkMzdjNWI4XkEyXkFqcGdeQXVyMTA3MzQ4MTc0._V1_SX300.jpg"
-    },
-    {
-      "Title": "Harry Potter and the Prisoner of Azkaban",
-      "Year": "2004",
-      "imdbID": "tt0304141",
-      "Type": "movie",
-      "Poster":
-          "https://m.media-amazon.com/images/M/MV5BMTY4NTIwODg0N15BMl5BanBnXkFtZTcwOTc0MjEzMw@@._V1_SX300.jpg"
-    }
+    // {
+    //   "Title": "Harry Potter and the Deathly Hallows: Part 2",
+    //   "Year": "2011",
+    //   "imdbID": "tt1201607",
+    //   "Type": "movie",
+    //   "Poster":
+    //       "https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"
+    // },
+    // {
+    //   "Title": "Harry Potter and the Sorcerer's Stone",
+    //   "Year": "2001",
+    //   "imdbID": "tt0241527",
+    //   "Type": "movie",
+    //   "Poster":
+    //       "https://m.media-amazon.com/images/M/MV5BNmQ0ODBhMjUtNDRhOC00MGQzLTk5MTAtZDliODg5NmU5MjZhXkEyXkFqcGdeQXVyNDUyOTg3Njg@._V1_SX300.jpg"
+    // },
+    // {
+    //   "Title": "Harry Potter and the Chamber of Secrets",
+    //   "Year": "2002",
+    //   "imdbID": "tt0295297",
+    //   "Type": "movie",
+    //   "Poster":
+    //       "https://m.media-amazon.com/images/M/MV5BMjE0YjUzNDUtMjc5OS00MTU3LTgxMmUtODhkOThkMzdjNWI4XkEyXkFqcGdeQXVyMTA3MzQ4MTc0._V1_SX300.jpg"
+    // },
+    // {
+    //   "Title": "Harry Potter and the Prisoner of Azkaban",
+    //   "Year": "2004",
+    //   "imdbID": "tt0304141",
+    //   "Type": "movie",
+    //   "Poster":
+    //       "https://m.media-amazon.com/images/M/MV5BMTY4NTIwODg0N15BMl5BanBnXkFtZTcwOTc0MjEzMw@@._V1_SX300.jpg"
+    // }
   ];
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,18 @@ class _HomePageState extends State<HomePage> {
                     flex:1,
                       child: TextField(decoration: InputDecoration(hintText: "Enter movie name"),)),
                   Expanded(
-                    child: ElevatedButton(onPressed: (){},
+                    child: ElevatedButton(onPressed: (){
+
+                      // var movies = fetchMovies();
+
+                      // value here is what's returned from the function
+                      // value here refers to the List<MovieSearch> from API
+                      fetchMovies().then((value) => {
+                        setState(() {
+                          _movies = value;
+                        })
+                      });
+                    },
                         child: Text("Search Movie")),
                   )
                 ],
@@ -77,14 +88,17 @@ class _HomePageState extends State<HomePage> {
                     itemCount:_movies.length,
                     // What to show on every row
                     itemBuilder: (context, index){
-                      return ListTile(
-                      title: Text(_movies[index]["Title"]!),
-                        subtitle: Text(_movies[index]["Year"]!),
-                        trailing: Icon(Icons.chevron_right),
-                        leading: Image.network(_movies[index]["Poster"]!),
-                        onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
-                        },
+                      return Card(
+                        color: Colors.yellow,
+                        child: ListTile(
+                        title: Text(_movies[index].title),
+                          subtitle: Text(_movies[index].year),
+                          trailing: Icon(Icons.chevron_right),
+                          leading: Image.network(_movies[index].poster),
+                          onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
+                          },
+                        ),
                       );
                     }),
               )
