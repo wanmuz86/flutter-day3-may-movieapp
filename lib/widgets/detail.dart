@@ -12,11 +12,34 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  MovieDetail? _movie;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  void loadData(){
+    fetchMovie().then((value) => {
+      setState(() {
+       _movie = value;
+      })
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Detail page"),),
-      body: Text("Detail page for ${widget.imdbId}"),
+      body: _movie == null ? Center(child: CircularProgressIndicator()): Center(
+        child: Column(
+          children: [
+            Text(_movie!.title),  // I WILL USE ! because I am sure moview will be there
+            Text(_movie!.year),
+            Image.network(_movie!.poster)
+          ],
+        ),
+      ),
     );
   }
 
