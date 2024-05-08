@@ -43,6 +43,8 @@ class _HomePageState extends State<HomePage> {
                           // value here is what's returned from the function
                           // value here refers to the List<MovieSearch> from API
                           if (movieEditingController.text.length > 2) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+
                             fetchMovies(movieEditingController.text).then((
                                 value) =>
                             {
@@ -74,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                           title: Text(_movies[index].title),
                           subtitle: Text(_movies[index].year),
                           trailing: Icon(Icons.chevron_right),
-                          leading: Image.network(_movies[index].poster),
+                          leading: _movies[index].poster != "N/A" ? Image.network(_movies[index].poster) : SizedBox(),
                           onTap: () {
                             Navigator.push(
                                 context,
