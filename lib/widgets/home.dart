@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:movie_app_may/widgets/detail.dart';
+
+import '../models/movie_search.dart';
+import 'package:http/http.dart' as http; // it was exported as a object
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -87,5 +92,33 @@ class _HomePageState extends State<HomePage> {
           ),
         )
     );
+  }
+
+  // Future -> It means that this is an asynchronous method
+  // Later, when we call this function either use async - await or use then
+  // var movies = async fetchAlbum() , fetchAlbum().then(val=> {))
+
+  // <> -> Type of data returned by this method
+  // [] / Array -> List<ClassName>
+  // {} / Object -> ClassName
+  Future<List<MovieSearch>> fetchMovies() async {
+    // import http
+    final response = await http
+        .get(Uri.parse('https://www.omdbapi.com/?s=Harry&apikey=87d10179'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+
+      // []-> You will call the 5th method
+      // {} -> You will call the 4th method
+
+      // jsonDecode -> import 'dart:convert'
+      return MovieSearch.moviesFromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load movies');
+    }
   }
 }
