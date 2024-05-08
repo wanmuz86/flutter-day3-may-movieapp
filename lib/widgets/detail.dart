@@ -37,13 +37,21 @@ class _DetailPageState extends State<DetailPage> {
           child: Column(
             children: [
               Text(_movie!.title, style: TextStyle(fontSize: 32),),  // I WILL USE ! because I am sure moview will be there
+              SizedBox(height: 8,),
               Text(_movie!.year),
+              SizedBox(height: 8,),
               Image.network(_movie!.poster),
+              SizedBox(height: 8,),
               Text(_movie!.director),
+              SizedBox(height: 8,),
               Text(_movie!.actors ?? ""),
+              SizedBox(height: 8,),
               Text(_movie!.released),
+              SizedBox(height: 8,),
               Text(_movie!.genre),
-              Text(_movie!.plot , textAlign: TextAlign.center,)
+              SizedBox(height: 8,),
+              Text(_movie!.plot , textAlign: TextAlign.center,),
+              SizedBox(height: 8,),
             ],
           ),
         ),
