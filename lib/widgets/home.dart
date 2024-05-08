@@ -49,39 +49,42 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text("Movie app"),
         ),
-        body: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex:2,
-                    child: TextField()),
-                Expanded(
-                  child: ElevatedButton(onPressed: (){},
-                      child: Text("Search Movie")),
-                )
-              ],
-            ),
-            Expanded(
-              // by default if I add Expanded it will be flex:1
-              // If I dont have expanded flex 0
-              child: ListView.builder(
-                // How many rows are there
-                  itemCount:_movies.length,
-                  // What to show on every row
-                  itemBuilder: (context, index){
-                    return ListTile(
-                    title: Text(_movies[index]["Title"]!),
-                      subtitle: Text(_movies[index]["Year"]!),
-                      trailing: Icon(Icons.chevron_right),
-                      leading: Image.network(_movies[index]["Poster"]!),
-                      onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
-                      },
-                    );
-                  }),
-            )
-          ],
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex:1,
+                      child: TextField(decoration: InputDecoration(hintText: "Enter movie name"),)),
+                  Expanded(
+                    child: ElevatedButton(onPressed: (){},
+                        child: Text("Search Movie")),
+                  )
+                ],
+              ),
+              Expanded(
+                // by default if I add Expanded it will be flex:1
+                // If I dont have expanded flex 0
+                child: ListView.builder(
+                  // How many rows are there
+                    itemCount:_movies.length,
+                    // What to show on every row
+                    itemBuilder: (context, index){
+                      return ListTile(
+                      title: Text(_movies[index]["Title"]!),
+                        subtitle: Text(_movies[index]["Year"]!),
+                        trailing: Icon(Icons.chevron_right),
+                        leading: Image.network(_movies[index]["Poster"]!),
+                        onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
+                        },
+                      );
+                    }),
+              )
+            ],
+          ),
         )
     );
   }
