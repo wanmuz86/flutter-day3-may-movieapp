@@ -14,40 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _movies = [
-    // {
-    //   "Title": "Harry Potter and the Deathly Hallows: Part 2",
-    //   "Year": "2011",
-    //   "imdbID": "tt1201607",
-    //   "Type": "movie",
-    //   "Poster":
-    //       "https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"
-    // },
-    // {
-    //   "Title": "Harry Potter and the Sorcerer's Stone",
-    //   "Year": "2001",
-    //   "imdbID": "tt0241527",
-    //   "Type": "movie",
-    //   "Poster":
-    //       "https://m.media-amazon.com/images/M/MV5BNmQ0ODBhMjUtNDRhOC00MGQzLTk5MTAtZDliODg5NmU5MjZhXkEyXkFqcGdeQXVyNDUyOTg3Njg@._V1_SX300.jpg"
-    // },
-    // {
-    //   "Title": "Harry Potter and the Chamber of Secrets",
-    //   "Year": "2002",
-    //   "imdbID": "tt0295297",
-    //   "Type": "movie",
-    //   "Poster":
-    //       "https://m.media-amazon.com/images/M/MV5BMjE0YjUzNDUtMjc5OS00MTU3LTgxMmUtODhkOThkMzdjNWI4XkEyXkFqcGdeQXVyMTA3MzQ4MTc0._V1_SX300.jpg"
-    // },
-    // {
-    //   "Title": "Harry Potter and the Prisoner of Azkaban",
-    //   "Year": "2004",
-    //   "imdbID": "tt0304141",
-    //   "Type": "movie",
-    //   "Poster":
-    //       "https://m.media-amazon.com/images/M/MV5BMTY4NTIwODg0N15BMl5BanBnXkFtZTcwOTc0MjEzMw@@._V1_SX300.jpg"
-    // }
-  ];
+  var _movies = [];
+  var movieEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,21 +29,33 @@ class _HomePageState extends State<HomePage> {
               Row(
                 children: [
                   Expanded(
-                    flex:1,
-                      child: TextField(decoration: InputDecoration(hintText: "Enter movie name"),)),
+                      flex: 1,
+                      child: TextField(
+                        controller: movieEditingController,
+                        decoration:
+                            InputDecoration(hintText: "Enter movie name"),
+                      )),
                   Expanded(
-                    child: ElevatedButton(onPressed: (){
+                    child: ElevatedButton(
+                        onPressed: () {
+                          // var movies = fetchMovies();
 
-                      // var movies = fetchMovies();
-
-                      // value here is what's returned from the function
-                      // value here refers to the List<MovieSearch> from API
-                      fetchMovies().then((value) => {
-                        setState(() {
-                          _movies = value;
-                        })
-                      });
-                    },
+                          // value here is what's returned from the function
+                          // value here refers to the List<MovieSearch> from API
+                          if (movieEditingController.text.length > 2) {
+                            fetchMovies(movieEditingController.text).then((
+                                value) =>
+                            {
+                              setState(() {
+                                _movies = value;
+                              })
+                            });
+                          }
+                          else {
+                            var snackBar = SnackBar(content: Text("Minimum 3 characters required"));
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          }
+                        },
                         child: Text("Search Movie")),
                   )
                 ],
@@ -84,19 +64,22 @@ class _HomePageState extends State<HomePage> {
                 // by default if I add Expanded it will be flex:1
                 // If I dont have expanded flex 0
                 child: ListView.builder(
-                  // How many rows are there
-                    itemCount:_movies.length,
+                    // How many rows are there
+                    itemCount: _movies.length,
                     // What to show on every row
-                    itemBuilder: (context, index){
+                    itemBuilder: (context, index) {
                       return Card(
                         color: Colors.yellow,
                         child: ListTile(
-                        title: Text(_movies[index].title),
+                          title: Text(_movies[index].title),
                           subtitle: Text(_movies[index].year),
                           trailing: Icon(Icons.chevron_right),
                           leading: Image.network(_movies[index].poster),
-                          onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DetailPage()));
                           },
                         ),
                       );
@@ -104,8 +87,7 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ),
-        )
-    );
+        ));
   }
 
   // Future -> It means that this is an asynchronous method
@@ -115,10 +97,10 @@ class _HomePageState extends State<HomePage> {
   // <> -> Type of data returned by this method
   // [] / Array -> List<ClassName>
   // {} / Object -> ClassName
-  Future<List<MovieSearch>> fetchMovies() async {
+  Future<List<MovieSearch>> fetchMovies(searchText) async {
     // import http
     final response = await http
-        .get(Uri.parse('https://www.omdbapi.com/?s=Harry&apikey=87d10179'));
+        .get(Uri.parse('https://www.omdbapi.com/?s=$searchText&apikey=87d10179'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -128,7 +110,8 @@ class _HomePageState extends State<HomePage> {
       // {} -> You will call the 4th method
 
       // jsonDecode -> import 'dart:convert'
-      return MovieSearch.moviesFromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return MovieSearch.moviesFromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
