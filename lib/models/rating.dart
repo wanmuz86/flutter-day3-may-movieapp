@@ -7,7 +7,6 @@ class Rating {
   factory Rating.fromJson(Map<String,dynamic> json){
     return Rating(source: json["Source"], value: json["Value"]);
   }
-
   static List<Rating> ratingsFromJson(dynamic json ){
     var ratings = json;
     List<Rating> results = List.empty(growable: true);

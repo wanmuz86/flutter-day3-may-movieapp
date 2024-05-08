@@ -1,3 +1,4 @@
+import 'rating.dart';
 // 1) Create the class
 class MovieDetail {
   // 2) Create the properties
@@ -11,6 +12,8 @@ class MovieDetail {
   final String plot;
   final String released;
   final String director;
+  final List<Rating> ratings;
+  
   // 3) Generate the constructor
 
   MovieDetail(
@@ -23,7 +26,8 @@ class MovieDetail {
         this.actors,
       required this.plot,
       required this.released,
-      required this.director});
+      required this.director,
+      required this.ratings});
 
   // 4) fromJson method (JSON to Object transformer)
 
@@ -37,6 +41,9 @@ factory MovieDetail.fromJson(Map<String,dynamic> json){
       plot: json["Plot"],
       released: json["Released"],
       director: json["Director"],
-      actors: json["Actors"]);
+      actors: json["Actors"],
+    ratings:Rating.ratingsFromJson(json["Ratings"])
+  
+  );
 }
 }
