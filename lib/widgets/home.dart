@@ -53,26 +53,34 @@ class _HomePageState extends State<HomePage> {
           children: [
             Row(
               children: [
-                TextField(),
-                ElevatedButton(onPressed: (){},
-                    child: Text("Search Movie"))
+                Expanded(
+                  flex:2,
+                    child: TextField()),
+                Expanded(
+                  child: ElevatedButton(onPressed: (){},
+                      child: Text("Search Movie")),
+                )
               ],
             ),
-            ListView.builder(
-              // How many rows are there
-                itemCount:_movies.length,
-                // What to show on every row
-                itemBuilder: (context, index){
-                  return ListTile(
-                  title: Text(_movies[index]["Title"]!),
-                    subtitle: Text(_movies[index]["Year"]!),
-                    trailing: Icon(Icons.chevron_right),
-                    leading: Image.network(_movies[index]["Poster"]!),
-                    onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
-                    },
-                  );
-                })
+            Expanded(
+              // by default if I add Expanded it will be flex:1
+              // If I dont have expanded flex 0
+              child: ListView.builder(
+                // How many rows are there
+                  itemCount:_movies.length,
+                  // What to show on every row
+                  itemBuilder: (context, index){
+                    return ListTile(
+                    title: Text(_movies[index]["Title"]!),
+                      subtitle: Text(_movies[index]["Year"]!),
+                      trailing: Icon(Icons.chevron_right),
+                      leading: Image.network(_movies[index]["Poster"]!),
+                      onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailPage()));
+                      },
+                    );
+                  }),
+            )
           ],
         )
     );
